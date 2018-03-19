@@ -1,33 +1,70 @@
-#  Vagrant-Devops Udemy course code
+#  Vagrant Demo for Ansible (ad-hoc commands)
 
-The course can be found here with a code for the maximum discount I'm able to give:
-https://www.udemy.com/devops-for-operations/?couponCode=LINKEDINDEVOPS99
+This demo setups up our vagrant environment so we can showcase the power of Ansible to run various ad-hoc commands and scripts.
 
 =========================
-
-All of the Vagrant code was developed on a windows 10 laptop. Local access to the website we'll create as part of this exercise will be via entering http://127.0.0.1 into your preferred web browser.
-
-Pre-requisites
---------
-1. Puppet modules must be in place. See step 4 on setup below.
-2. I set my own puppet master to autosign = true.
 
 Setup
 --------
  1. Install Vagrant and Github.
- 2. Clone this repo: https://github.com/dmccuk/vagrant-devops.git - This will create a vagrant-devops directory full of the code required for this piece of work.
- 3. before you can run it, there are some dependancies. My code requires some puppet modules be setup and available.
- 4. Clone this repo onto your puppet master: https://github.com/dmccuk/modules.git **Clone it to a safe place and move the modules into where you normally put them (somewhere like /etc/puppet/modules)**. It will create a directory called "modules" with the puppet modules required within.
- 5. I've included a site.pp just as a reference but you probably won't need it.
- 6. Now you can run "vagrant up" and see what happens.
- 7. Hopefully there won't be any errors when it starts to run. I'm happy to help if there is an issue.
- 8. Once the code has run, you should be able to visit the webpage and refresh. You should see each servername being load balanced appear on the screen in turn (with every refresh - F5). No login to the vagrant VM's should be required.
+ 2. Clone this repo: https://github.com/opsmotion/ansible_demo.git - This will create an ansible_demo directory full of the code required for this piece of work.
+ 3. Cd into the ansible_demo firectory and run "vagrant up".
+ 4. once the Vagrant machines have been created, use vagrant ssh <servername> to access them.
  
-Assumptions
+ ````
+[ansible_demo]# vagrant ssh master.example.com
+Welcome to Ubuntu 14.04.5 LTS (GNU/Linux 3.13.0-125-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com/
+
+  System information as of Mon Mar 19 22:22:27 UTC 2018
+
+  System load:  0.23              Processes:           92
+  Usage of /:   3.6% of 39.34GB   Users logged in:     1
+  Memory usage: 32%               IP address for eth0: 10.0.2.15
+  Swap usage:   0%                IP address for eth1: 192.168.32.40
+
+  => There is 1 zombie process.
+
+  Graph this data and manage this system at:
+    https://landscape.canonical.com/
+
+  Get cloud support with Ubuntu Advantage Cloud Guest:
+    http://www.ubuntu.com/business/services/cloud
+
+New release '16.04.4 LTS' available.
+Run 'do-release-upgrade' to upgrade to it.
+
+
+Last login: Mon Mar 19 22:22:28 2018 from ansible03.example.com
+vagrant@master:~$ 
+ ````
+
+Command examples
 --------
- * I have assumed your puppet master is called "puppet".
- * If you don't automatically sign puppet certificate requests to your master, you will need to "puppet cert sign "node_name" before puppet will work. but the request will need to be made first. I've setup puppet to run every 30 mins on the vagrant VMs (and also set --waitforcert to 15 seconds) so once signed, puppet on each node will make the updates within that time.
+ * To run ansible against just one host:
+ ````
+ vagrant@master:~$ ansible -i ansible01, all -m shell -a 'uptime' -k
+SSH password: 
+ansible01 | success | rc=0 >>
+ 22:39:47 up 21 min,  1 user,  load average: 0.00, 0.01, 0.05
 
-If you have any questions, please raise an Issue and I will respond as soon as possible. Alternatively, if you are a student on the Udemy course "DevOps for Operations", then please contct me through Udemy.
+vagrant@master:~$ 
+````
 
+ * To run ansible against a list of hosts, create a hosts file and call it like this:
+ ````
+ vagrant@master:~$ ansible -i list.dm all -m shell -a 'uptime' -k
+SSH password: 
+ansible03 | success | rc=0 >>
+ 22:39:14 up 18 min,  2 users,  load average: 0.00, 0.01, 0.05
 
+ansible02 | success | rc=0 >>
+ 22:39:14 up 20 min,  1 user,  load average: 0.00, 0.01, 0.05
+
+ansible01 | success | rc=0 >>
+ 22:39:14 up 20 min,  1 user,  load average: 0.00, 0.01, 0.05
+
+vagrant@master:~$ 
+
+ ````
