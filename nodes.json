@@ -1,10 +1,10 @@
 {
   "nodes": {
-    "node01.example.com": {
+    "ansible01.example.com": {
       ":ip": "192.168.32.10",
       "ports": [
 {
-          ":host": 80,
+          ":host": 8080,
           ":guest": 80,
           ":id": "http"
 }
@@ -12,11 +12,11 @@
       ":memory": 512,
       ":bootstrap": "bootstrap-node.sh"
     },
-    "web01.example.com": {
+    "ansible02.example.com": {
       ":ip": "192.168.32.20",
       "ports": [
 {
-          ":host": 81,
+          ":host": 8081,
           ":guest": 80,
           ":id": "http"
 }
@@ -24,11 +24,23 @@
       ":memory": 512,
       ":bootstrap": "bootstrap-node.sh"
     },
-    "web02.example.com": {
+    "ansible03.example.com": {
       ":ip": "192.168.32.30",
       "ports": [
 {
-          ":host": 82,
+          ":host": 8082,
+          ":guest": 80,
+          ":id": "http"
+}
+],
+      ":memory": 512,
+      ":bootstrap": "bootstrap-node.sh"
+    },
+    "master.example.com": {
+      ":ip": "192.168.32.40",
+      "ports": [
+{
+          ":host": 8083,
           ":guest": 80,
           ":id": "http"
 }
@@ -36,6 +48,5 @@
       ":memory": 512,
       ":bootstrap": "bootstrap-node.sh"
     }
-
   }
 }
